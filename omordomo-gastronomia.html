@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O Mordomo Gastronomia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde-escuro: #1a3c2e;
+      --dourado: #b8922a;
+      --creme: #f5f0e8;
+      --off-white: #fefcf8;
+      --tomato: #b33a3a;
+      --text-dark: #19221b;
+      --shadow: 0 18px 45px rgba(26, 60, 46, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--off-white);
+      color: var(--text-dark);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+
+    /* Faixa decorativa tricolor (verde / creme / vermelho) */
+    .italian-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      display: flex;
+      z-index: 22;
+    }
+
+    .italian-bar span {
+      flex: 1;
+    }
+
+    .italian-bar .g { background: var(--verde-escuro); }
+    .italian-bar .c { background: var(--creme); }
+    .italian-bar .r { background: var(--tomato); }
+
+    .topbar {
+      position: fixed;
+      inset: 5px 0 auto;
+      z-index: 20;
+      background: rgba(254, 252, 248, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 60, 46, 0.08);
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px 0;
+    }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.02em;
+      color: var(--verde-escuro);
+      text-transform: uppercase;
+    }
+
+    .brand span {
+      color: var(--dourado);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--verde-escuro);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 4px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 100%;
+      bottom: 0;
+      height: 2px;
+      background: var(--dourado);
+      transition: right .25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--dourado);
+    }
+
+    .nav-links a:hover::after {
+      right: 0;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--verde-escuro);
+      font-size: 1.2rem;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding-top: 125px;
+      padding-bottom: 56px;
+      background: linear-gradient(180deg, rgba(26,60,46,.95), rgba(26,60,46,.82) 55%, rgba(26,60,46,.92));
+      color: var(--off-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Textura sutil de "massa" / pontilhado */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(245, 240, 232, 0.06) 1.5px, transparent 1.5px);
+      background-size: 26px 26px;
+      pointer-events: none;
+    }
+
+    .hero-deco {
+      position: absolute;
+      color: var(--dourado);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .hero-deco.spaghetti-top {
+      top: 70px;
+      right: -40px;
+      width: 360px;
+      transform: rotate(-8deg);
+    }
+
+    .hero-deco.spaghetti-bottom {
+      bottom: 30px;
+      left: -50px;
+      width: 320px;
+      transform: rotate(6deg) scaleY(-1);
+    }
+
+    .hero-deco.plate {
+      top: 50%;
+      left: 50%;
+      width: 620px;
+      height: 620px;
+      transform: translate(-50%, -50%);
+      opacity: 0.06;
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 720px;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-size: 0.82rem;
+      opacity: 0.9;
+      margin-bottom: 18px;
+      color: var(--dourado);
+      font-weight: 600;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--dourado);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 4.8rem);
+      letter-spacing: -0.03em;
+      margin-bottom: 22px;
+      line-height: 1.08;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--dourado);
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      max-width: 620px;
+      margin: 0 auto 34px;
+      color: rgba(254, 252, 248, 0.92);
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 170px;
+      padding: 15px 26px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      transition: transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+      cursor: pointer;
+    }
+
+    .button-primary {
+      background: var(--dourado);
+      color: var(--verde-escuro);
+    }
+
+    .button-primary:hover {
+      box-shadow: 0 10px 24px rgba(184, 146, 42, 0.35);
+    }
+
+    .button-secondary {
+      background: rgba(254, 252, 248, 0.12);
+      color: var(--off-white);
+      border-color: rgba(254, 252, 248, 0.3);
+    }
+
+    .button-secondary:hover {
+      background: rgba(254, 252, 248, 0.2);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 78px 0;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+
+    .section-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--verde-escuro);
+    }
+
+    .flag-line {
+      display: flex;
+      width: 56px;
+      height: 5px;
+      border-radius: 3px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(26, 60, 46, 0.06);
+    }
+
+    .flag-line i {
+      flex: 1;
+    }
+
+    .flag-line .fg { background: var(--verde-escuro); }
+    .flag-line .fc { background: var(--creme); }
+    .flag-line .fr { background: var(--tomato); }
+
+    /* DIVIDER decorativo entre seções */
+    .divider {
+      display: flex;
+      justify-content: center;
+      color: var(--dourado);
+      opacity: 0.5;
+    }
+
+    .divider svg {
+      width: 130px;
+      height: 22px;
+    }
+
+    /* TAGLINE */
+    .tagline {
+      text-align: center;
+      padding: 30px 0 70px;
+    }
+
+    .tagline blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      color: var(--verde-escuro);
+      max-width: 780px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .tagline cite {
+      display: block;
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--dourado);
+      font-style: normal;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* SOBRE */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .about {
+      background: #fff;
+      border-radius: 26px;
+      padding: 40px 42px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(26, 60, 46, 0.06);
+    }
+
+    .about p {
+      max-width: 860px;
+      color: #444;
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
+
+    .about p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-side {
+      background: linear-gradient(160deg, var(--verde-escuro), #0f2a1f);
+      border-radius: 26px;
+      padding: 40px 32px;
+      color: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-side svg {
+      width: 64px;
+      height: 64px;
+      color: var(--dourado);
+      margin-bottom: 18px;
+    }
+
+    .about-side h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .about-side p {
+      font-size: 0.92rem;
+      color: rgba(254, 252, 248, 0.85);
+    }
+
+    /* CARDÁPIO */
+    .menu-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .menu-card {
+      background: var(--creme);
+      border-radius: 26px;
+      padding: 30px 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(26, 60, 46, 0.08);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 50px rgba(26, 60, 46, 0.16);
+    }
+
+    .icon-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--off-white);
+      display: grid;
+      place-items: center;
+      color: var(--dourado);
+      border: 1px solid rgba(184, 146, 42, 0.35);
+      margin-bottom: 18px;
+    }
+
+    .icon-badge svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .menu-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--verde-escuro);
+      margin-bottom: 12px;
+    }
+
+    .menu-card p {
+      color: #444;
+      font-size: 0.975rem;
+      line-height: 1.7;
+    }
+
+    /* DIFERENCIAIS */
+    .feature-grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 30px 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(26, 60, 46, 0.08);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .feature-card .icon-badge {
+      flex-shrink: 0;
+      margin-bottom: 0;
+      background: var(--creme);
+      color: var(--verde-escuro);
+      border-color: rgba(26, 60, 46, 0.12);
+    }
+
+    .feature-card h3 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 8px;
+      color: var(--verde-escuro);
+      font-size: 1.25rem;
+    }
+
+    .feature-card p {
+      color: #555;
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+
+    /* CTA */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(184,146,42,0.14), rgba(26,60,46,0.06));
+      border-radius: 28px;
+      padding: 50px 34px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(184, 146, 42, 0.18);
+    }
+
+    .cta-banner .eyebrow {
+      color: var(--tomato);
+    }
+
+    .cta-banner .eyebrow::before,
+    .cta-banner .eyebrow::after {
+      background: var(--tomato);
+    }
+
+    .cta-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      max-width: 720px;
+      margin-bottom: 16px;
+      color: var(--verde-escuro);
+    }
+
+    .cta-banner p {
+      max-width: 740px;
+      margin: 0 auto 26px;
+      color: #4f4a42;
+      font-size: 1rem;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cta-banner .button-primary {
+      background: var(--verde-escuro);
+      color: var(--off-white);
+    }
+
+    .cta-banner .button-secondary {
+      background: var(--off-white);
+      color: var(--verde-escuro);
+      border-color: rgba(26, 60, 46, 0.25);
+    }
+
+    /* FOOTER */
+    .footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      color: #444;
+      padding-top: 24px;
+      border-top: 1px solid rgba(26, 60, 46, 0.08);
+      font-size: 0.95rem;
+    }
+
+    .footer .brand-mini {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--verde-escuro);
+      margin-bottom: 6px;
+    }
+
+    .footer .socials a {
+      margin-right: 18px;
+      color: var(--verde-escuro);
+      font-weight: 500;
+    }
+
+    .footer .socials a:hover {
+      color: var(--dourado);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      font-size: 0.82rem;
+      color: #8a8378;
+      padding: 18px 0 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: #5f5b52;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .menu-grid, .feature-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-side {
+        padding: 32px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 0 18px 36px;
+      }
+
+      .navbar {
+        padding: 18px 0;
+      }
+
+      .nav-links {
+        position: fixed;
+        inset: 70px 18px auto auto;
+        flex-direction: column;
+        gap: 18px;
+        background: rgba(254, 252, 248, 0.98);
+        padding: 22px;
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        display: none;
+        width: calc(100% - 36px);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .hero {
+        padding-top: 145px;
+        padding-bottom: 44px;
+      }
+
+      .hero-deco {
+        display: none;
+      }
+
+      .section-heading {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .menu-grid, .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="italian-bar">
+    <span class="g"></span><span class="c"></span><span class="r"></span>
+  </div>
+
+  <div class="topbar">
+    <div class="navbar page">
+      <a class="brand" href="#hero">O Mordomo <span>Gastronomia</span></a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false">☰</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#about">Sobre</a>
+        <a href="#menu">Cardápio</a>
+        <a href="#diferenciais">Diferenciais</a>
+        <a href="#pedido">Pedidos</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <!-- Decorações de "talharim" e prato -->
+      <svg class="hero-deco plate" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
+        <circle cx="50" cy="50" r="48"/>
+        <circle cx="50" cy="50" r="36"/>
+      </svg>
+      <svg class="hero-deco spaghetti-top" viewBox="0 0 200 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M0 30c10-20 20 20 30 0s20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0"/>
+        <path d="M0 42c10-20 20 20 30 0s20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0"/>
+      </svg>
+      <svg class="hero-deco spaghetti-bottom" viewBox="0 0 200 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M0 30c10-20 20 20 30 0s20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0"/>
+        <path d="M0 42c10-20 20 20 30 0s20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0 20 20 30 0"/>
+      </svg>
+
+      <div class="hero-content">
+        <p class="eyebrow">São Paulo · Trattoria de Comfort Food</p>
+        <h1>Comida caseira <em>congelada</em>, com alma de trattoria</h1>
+        <p>Refeições artesanais inspiradas na cozinha italiana: massas frescas, molhos lentos e o conforto de um prato feito com tempo, carinho e ingredientes selecionados — prontos para aquecer o seu dia.</p>
+        <div class="hero-buttons">
+          <a class="button button-primary" href="#menu">Ver cardápio</a>
+          <a class="button button-secondary" href="https://bit.ly/omordomogastronomia" target="_blank">Fazer pedido</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="tagline">
+      <blockquote>"A cucina è poesia: cada prato conta uma história de tempo, tradição e afeto."</blockquote>
+      <cite>O Mordomo Gastronomia</cite>
+    </div>
+
+    <section id="about">
+      <div class="section-heading">
+        <span class="flag-line"><i class="fg"></i><i class="fc"></i><i class="fr"></i></span>
+        <h2>Sobre nós</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about">
+          <p>O Mordomo Gastronomia nasceu do encontro entre o aconchego da comida caseira e a tradição das massas artesanais italianas. Inspirados pelo ritual das trattorias — onde tudo é feito à mão, com tempo e paciência — unimos o melhor do slow food à praticidade dos congelados.</p>
+          <p>Cada prato é preparado em pequenos lotes: massas frescas, molhos que cozinham por horas e carnes de cocção lenta, embalados com cuidado para preservar sabor, aroma e textura até chegar à sua mesa, em São Paulo.</p>
+          <p>Mais do que refeições prontas, entregamos uma experiência gastronômica completa — para o dia a dia ou para celebrar momentos especiais.</p>
+        </div>
+        <div class="about-side">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 24a8 8 0 1 1 16 0 5 5 0 1 1-10 0 3 3 0 1 1 6 0"/>
+          </svg>
+          <h3>Feito à mão, com tempo</h3>
+          <p>Massas, molhos e ragus preparados como em família — sem pressa, sem atalhos, do nosso fogão para o seu freezer.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider">
+      <svg viewBox="0 0 120 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M2 12c8-10 16 10 24 0s16 10 24 0 16 10 24 0 16 10 24 0 16 10 22 0"/>
+      </svg>
+    </div>
+
+    <section id="menu">
+      <div class="section-heading">
+        <span class="flag-line"><i class="fg"></i><i class="fc"></i><i class="fr"></i></span>
+        <h2>Cardápio</h2>
+      </div>
+      <div class="menu-grid">
+        <article class="menu-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 40C14 28 24 22 40 8"/>
+              <ellipse cx="18" cy="30" rx="4" ry="5" transform="rotate(-35 18 30)"/>
+              <ellipse cx="28" cy="20" rx="4" ry="5" transform="rotate(-35 28 20)"/>
+            </svg>
+          </div>
+          <h3>Antepasto</h3>
+          <p>Entradas delicadas para abrir o apetite: patês, conservas, azeitonas e pães artesanais que harmonizam com vinho ou café.</p>
+        </article>
+        <article class="menu-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 24a8 8 0 1 1 16 0 5 5 0 1 1-10 0 3 3 0 1 1 6 0"/>
+            </svg>
+          </div>
+          <h3>Massa fresca</h3>
+          <p>Talharim, ravioli e nhoque feitos com massa caseira, no estilo das trattorias, com textura e sabor de receita de família.</p>
+        </article>
+        <article class="menu-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="27" r="12"/>
+              <path d="M24 15c0-4 2-6 6-6"/>
+              <path d="M20 11c2 2 2 4 0 6"/>
+            </svg>
+          </div>
+          <h3>Molhos</h3>
+          <p>Sugos ricos e cremosos, feitos com tomates maduros, ervas frescas e cozimento lento para realçar sabor em qualquer prato.</p>
+        </article>
+        <article class="menu-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 6v14a4 4 0 0 0 4 4v18"/>
+              <path d="M14 6v8M18 6v8M22 6v8"/>
+              <path d="M34 6c-4 0-6 4-6 9s2 8 6 9v18"/>
+            </svg>
+          </div>
+          <h3>Carnes</h3>
+          <p>Cortes suculentos, ragu lento e almôndegas com tempero caseiro que trazem aconchego e conforto para a mesa.</p>
+        </article>
+        <article class="menu-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 4v40M6 14l36 20M42 14 6 34"/>
+            </svg>
+          </div>
+          <h3>Congelados</h3>
+          <p>Refeições prontas, embaladas com cuidado para o dia a dia: fáceis de aquecer, mantendo o frescor e o sabor caseiro.</p>
+        </article>
+        <article class="menu-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 6h20l-2 14a8 8 0 0 1-16 0z"/>
+              <path d="M24 20v18M16 42h16"/>
+            </svg>
+          </div>
+          <h3>Comemorações</h3>
+          <p>Menus especiais para aniversários, jantares e encontros íntimos — pratos para celebrar sem perder a autenticidade.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider">
+      <svg viewBox="0 0 120 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M2 12c8-10 16 10 24 0s16 10 24 0 16 10 24 0 16 10 24 0 16 10 22 0"/>
+      </svg>
+    </div>
+
+    <section id="diferenciais">
+      <div class="section-heading">
+        <span class="flag-line"><i class="fg"></i><i class="fc"></i><i class="fr"></i></span>
+        <h2>Diferenciais</h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 22a8 8 0 0 1 4-14 7 7 0 0 1 12 0 8 8 0 0 1 4 14"/>
+              <path d="M14 22v8h20v-8"/>
+              <path d="M14 38h20"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Sabor caseiro</h3>
+            <p>Receitas pensadas como se fossem preparadas em casa, com toque artesanal italiano, texturas elegantes e temperos equilibrados.</p>
+          </div>
+        </article>
+        <article class="feature-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="24" r="18"/>
+              <path d="M24 14v10l7 5"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Praticidade</h3>
+            <p>Opções congeladas e prontas para simplificar o seu dia, sem comprometer qualidade, sabor ou identidade culinária.</p>
+          </div>
+        </article>
+        <article class="feature-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="18" width="32" height="22" rx="2"/>
+              <path d="M8 26h32"/>
+              <path d="M24 18v22"/>
+              <path d="M24 18c-6 0-8-8-2-8 4 0 2 6 2 8zM24 18c6 0 8-8 2-8-4 0-2 6-2 8z"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Comemorações</h3>
+            <p>Menus sob medida para ocasiões especiais: entregas que tornam festas íntimas ainda mais cheias de sabor.</p>
+          </div>
+        </article>
+        <article class="feature-card">
+          <div class="icon-badge">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M30 6 42 18 18 42H6V30z"/>
+              <path d="M26 10 38 22"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Encomendas personalizadas</h3>
+            <p>Cada pedido é adaptado ao seu gosto, criando combinações únicas para quem valoriza um cardápio feito sob medida.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="pedido">
+      <div class="cta-banner">
+        <p class="eyebrow">Buon appetito</p>
+        <h3>Pronto para pedir? Sua refeição especial está a um clique.</h3>
+        <p>Entre em contato pelo Instagram ou use o link direto para consultar nosso cardápio completo e fazer sua encomenda com atendimento personalizado.</p>
+        <div class="cta-actions">
+          <a class="button button-primary" href="https://www.instagram.com/omordomogastronomia" target="_blank">Instagram</a>
+          <a class="button button-secondary" href="https://bit.ly/omordomogastronomia" target="_blank">Fazer pedido</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page">
+    <div class="footer">
+      <div>
+        <p class="brand-mini">O Mordomo Gastronomia</p>
+        <p>Rua Desembargador Rocha Portela, 999, São Paulo – SP</p>
+        <p>CEP 03567-000</p>
+      </div>
+      <div class="socials">
+        <p>Instagram: <a href="https://www.instagram.com/omordomogastronomia" target="_blank">@omordomogastronomia</a></p>
+        <p>Contato: <a href="https://bit.ly/omordomogastronomia" target="_blank">bit.ly/omordomogastronomia</a></p>
+      </div>
+    </div>
+    <p class="footer-bottom">Tradizione, sapore e cura — em cada prato. © O Mordomo Gastronomia</p>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (navLinks.classList.contains('open')) {
+          navLinks.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
